@@ -1,0 +1,41 @@
+{% extends 'ToDoApp/layout.html' %}
+
+{% block content %}
+
+
+<form action="{% url 'add' %}"  method="post">
+    {% csrf_token %}
+    <div>
+        <label>Новая задача</label>
+        <input type="text" name="title" placeholder="Введите название задачи">
+    </div>
+    <button type="submit">Добавить</button>
+</form>
+{% if messages %}
+    <div>
+    {% for message in messages %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+
+{% for todo in todo_list %}
+<div>
+    <p>{{todo.id}} {{todo.title}}</p>
+    {% if todo.is_complete == False %}
+    <p>Не завершено</p>
+    <a href="{% url 'update' todo_id=todo.id %}">Закрыть</a>
+    {% else %}
+    <p>Завершено</p>
+    <a href="{% url 'update' todo_id=todo.id %}">Открыть</a>
+    {% endif %}
+    <a href="{% url 'delete' todo_id=todo.id %}">Удалить</a>
+</div>
+
+{% endfor %}
+
+
+{% endblock %}
