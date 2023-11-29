@@ -16,7 +16,7 @@ from django.contrib import messages
 
 def index(request):
     todos = Tasks.objects.all()
-    return render(request, "ToDoApp/index.html", {'todo_list': todos, 'title': "Главная страница"})
+    return render(request, "todolist/index.html", {'todo_list': todos, 'title': "Главная страница"})
 
 
 @require_http_methods(['POST'])

@@ -1,0 +1,17 @@
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'todolist/css/style.css' %}">
+</head>
+<body>
+<main>
+    <div class="title">Задачник, который просто делает свое дело</div>
+{% block content %}
+
+
+{% endblock content %}
+</main>
+</body>
+</html>

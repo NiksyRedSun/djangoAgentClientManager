@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<form action="{% url 'add' %}"  method="post" class="index">
+    {% csrf_token %}
+    <div>
+        <label>Новая задача:</label>
+        <input type="text" name="title" placeholder="Введите название задачи">
+        <button type="submit">Добавить</button>
+    </div>
+    {% if messages %}
+    {% for message in messages %}
+        <div class="message">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+</form>
+
+
+<table>
+{% for todo in todo_list %}
+<tr>
+    <td class="name">{{todo.id}}) {{todo.title}}</td>
+    {% if todo.is_complete == False %}
+    <td class="stat">Не завершено</td>
+    <td class="co"><a href="{% url 'update' todo_id=todo.id %}" class="but">Закрыть</a></td>
+    {% else %}
+    <td class="stat">Завершено</td>
+    <td class="co"><a href="{% url 'update' todo_id=todo.id %}" class="but">Открыть</a></td>
+    {% endif %}
+    <td class="co"><a href="{% url 'delete' todo_id=todo.id %}" class="but">Удалить</a></td>
+</tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}
