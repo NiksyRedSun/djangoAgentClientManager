@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
+<div class="title">Задачник, который просто делает свое дело</div>
 
 <form action="{% url 'add' %}"  method="post" class="index">
     {% csrf_token %}
@@ -23,7 +23,7 @@
 <table>
 {% for todo in todo_list %}
 <tr>
-    <td class="name">{{todo.id}}) {{todo.title}}</td>
+    <td class="name">{{forloop.counter}}) {{todo.title}}</td>
     {% if todo.is_complete == False %}
     <td class="stat">Не завершено</td>
     <td class="co"><a href="{% url 'update' todo_id=todo.id %}" class="but">Закрыть</a></td>

@@ -8,24 +8,27 @@ table {
     margin-right: auto;
     margin-left: auto;
     font-size: 17pt;
+
 }
+
 
 div.message {
     padding-top: 2%;
 }
 
 td.name {
+    vertical-align: center;
     width: 57%;
     text-align: left;
 }
 
 td.stat {
-    vertical-align: top;
+    vertical-align: center;
     text-align: left;
 }
 
 td.co {
-    vertical-align: top;
+    vertical-align: center;
 }
 
 form.index {
@@ -96,8 +99,7 @@ button:hover {
 }
 
 a.but{
-    padding-top: 2%;
-    padding-bottom: 2%;
+
     display: block;
     color: #03A062;;
     font-family: 'Ubuntu Mono', monospace;
@@ -106,6 +108,7 @@ a.but{
     text-align: center;
     text-decoration: none;
     background: black;
+    vertical-align: top;
 }
 
 a.but:hover{
