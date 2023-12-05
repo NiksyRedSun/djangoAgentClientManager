@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="title">Немного мотовилихи</div>
+
+<div class="map">
+    {% for line in map %}
+    <div class="center-text">{{ line }}</div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

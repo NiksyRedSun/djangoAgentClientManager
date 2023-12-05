@@ -13,21 +13,17 @@ table {
 
 
 div.map{
-
-    /*text-align: center;*/
     font-size: 25pt;
     font-weight: bold;
-    /*align-content: center;*/
     display: flex;
     align-items: center;
     justify-content: center;
-
+    font-family: monospace, monospace;
 }
 
-/*div.center-text {*/
-/*  text-align: center;*/
-
-/*}*/
+div.center-text {
+  text-align: center;
+}
 
 div.message {
     padding-top: 2%;

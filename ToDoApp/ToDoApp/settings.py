@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'todolist.apps.TodolistConfig',
     'members.apps.MembersConfig',
+    'motowheel.apps.MotowheelConfig',
 ]
 
 MIDDLEWARE = [
