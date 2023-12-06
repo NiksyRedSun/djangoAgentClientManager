@@ -30,6 +30,7 @@ class Agent(models.Model):
 
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    nickname = models.CharField(max_length=30)
     age = models.IntegerField()
     membership = models.BooleanField(choices=Membership.choices, default=Membership.IN)
     start_membership = models.DateTimeField(auto_now_add=True)

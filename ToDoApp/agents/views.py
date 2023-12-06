@@ -26,7 +26,7 @@ def index(request):
 
 
 @csrf_exempt
-def get_delete_put_member(request, id):
+def get_delete_put_agent(request, id):
 
     if request.method == 'GET':
         return HttpResponse(agent_repo.get(id))
@@ -38,14 +38,14 @@ def get_delete_put_member(request, id):
 
     elif request.method == 'PUT':
         inputs = json.loads(request.body)
-        result = __сheck_inputs(inputs, ['first_name', 'last_name', "age"])
+        result = __сheck_inputs(inputs, ['first_name', 'last_name', "nickname", "age"])
         if result != 'passed':
             return result
         return HttpResponse(agent_repo.update(id, inputs["first_name"], inputs["last_name"], inputs["age"]))
 
 
 @csrf_exempt
-def post_member(request):
+def post_agent(request):
     if request.method == 'POST':
         inputs = json.loads(request.body)
         result = __сheck_inputs(inputs, ['first_name', 'last_name', "age"])
