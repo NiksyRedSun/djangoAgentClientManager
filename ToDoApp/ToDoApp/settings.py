@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todolist.apps.TodolistConfig',
-    'members.apps.MembersConfig',
+    'agents.apps.AgentsConfig',
     'motowheel.apps.MotowheelConfig',
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
