@@ -18,7 +18,7 @@ class client_repo:
     def get(self, id):
         try:
             client = Client.objects.get(id=id)
-            return client
+            return client.__str__()
         except:
             return f'Client with id {id} not found'
 
@@ -26,7 +26,7 @@ class client_repo:
     def get_all(self):
         try:
             result = Client.objects.all()
-            return [f"{client}\n" for client in result]
+            return [f"{client.__str__()}\n" for client in result]
         except:
             return "Something went wrong, we can't send you list of targets"
 

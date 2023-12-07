@@ -41,7 +41,7 @@ def get_delete_put_agent(request, id):
         result = __сheck_inputs(inputs, ['first_name', 'last_name', "nickname", "age"])
         if result != 'passed':
             return result
-        return HttpResponse(agent_repo.update(id, inputs["first_name"], inputs["last_name"], inputs["age"]))
+        return HttpResponse(agent_repo.update(id, inputs["first_name"], inputs["last_name"], inputs["nickname"], inputs["age"]))
 
 
 @csrf_exempt

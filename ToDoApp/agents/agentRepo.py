@@ -18,7 +18,7 @@ class agent_repo:
     def get(self, id):
         try:
             agent = Agent.objects.get(id=id)
-            return agent
+            return agent.__str__()
         except:
             return f'Agent with id {id} not found'
 
@@ -41,10 +41,10 @@ class agent_repo:
 
 
 
-    def update(self, id, first_name, last_name, age):
+    def update(self, id, first_name, last_name, nickname, age):
         try:
             agent = Agent.objects.get(id=id)
-            agent.first_name, agent.last_name, agent.age = first_name, last_name, age
+            agent.first_name, agent.last_name, agent.nickname, agent.age = first_name, last_name, nickname, age
             agent.save()
             return f"Agent id {id} was updated"
         except:
