@@ -6,9 +6,9 @@ from .models import Agent
 class agent_repo:
 
 
-    def create(self, first_name, last_name, age):
+    def create(self, first_name, last_name, nickname, age):
         try:
-            agent = Agent(first_name=first_name, last_name=last_name, age=age)
+            agent = Agent(first_name=first_name, last_name=last_name, nickname=nickname, age=age)
             agent.save()
             return f'Our crew got new member, his id is {agent.id}'
         except:

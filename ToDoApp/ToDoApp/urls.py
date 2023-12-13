@@ -21,5 +21,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('todolist.urls')),
     path('agents/', include('agents.urls')),
-    path('motowheel/', include('motowheel.urls')),
 ]

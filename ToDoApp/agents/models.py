@@ -39,10 +39,10 @@ class Agent(models.Model):
     exp = models.IntegerField(default=0)
     equipment_level = models.IntegerField(choices=EquipmentLevel.choices, default=EquipmentLevel.FIRST)
 
-    objects = models.Manager()
+
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}, возраст: {self.age}, деньги: {self.money}, опыт: {self.exp},\n' \
+        return f'{self.first_name} \"{self.nickname}\" {self.last_name}, возраст: {self.age}, деньги: {self.money}, опыт: {self.exp},\n' \
                f'статус: {self.status_choices_dict[self.status]}, членство: {self.membership_choices_dict[self.membership]},\n' \
                f'уровень снаряжения: {self.equipment_level_choices_dict[self.equipment_level]}'
 
@@ -76,11 +76,31 @@ class Client(models.Model):
     exp = models.IntegerField(default=500)
     security_level = models.IntegerField(choices=SecurityLevel.choices, default=SecurityLevel.FIRST)
     status = models.BooleanField(choices=Status.choices, default=Status.ALIVE)
-    killed_by = models.OneToOneField(Agent, on_delete=models.DO_NOTHING, blank=True, null=True)
-    death_time = models.DateTimeField(blank=True, null=True)
+
 
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}, возраст: {self.age}, ' \
                f'награда: {self.price}, опыт за убийство: {self.exp}, статус: {self.status_choices_dict[self.status]},\n' \
                f'уровень защиты: {self.security_level_choices_dict[self.security_level]}'
+
+
+class Event(models.Model):
+
+    class Status(models.IntegerChoices):
+        SUCCESS = 1, 'успех'
+        FAILURE = 0, 'провал'
+    status_choices_dict = dict(Status.choices)
+
+
+    agent = models.OneToOneField(Agent, on_delete=models.DO_NOTHING, blank=True, null=True)
+    client = models.OneToOneField(Client, on_delete=models.DO_NOTHING, blank=True, null=True)
+    status = models.IntegerField(choices=Status.choices, default=Status.SUCCESS)
+    event_time = models.DateTimeField(auto_now_add=True)
+
+
+
+    def __str__(self):
+        return f'\nАгент: {self.agent.first_name} \"{self.agent.nickname}\" {self.agent.last_name}\n' \
+               f'Цель: {self.client.first_name} {self.client.last_name}\n' \
+               f'Статус: {self.status_choices_dict[self.status]}'
