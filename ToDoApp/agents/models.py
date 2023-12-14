@@ -89,14 +89,17 @@ class Event(models.Model):
 
     class Status(models.IntegerChoices):
         SUCCESS = 1, 'успех'
-        FAILURE = 0, 'провал'
+        FAILURE = 2, 'осечка'
+        UNCOVER = 3, 'раскрытие'
+        AGENTDEATH = 4, 'смерть агента'
+
     status_choices_dict = dict(Status.choices)
 
 
-    agent = models.OneToOneField(Agent, on_delete=models.DO_NOTHING, blank=True, null=True)
-    client = models.OneToOneField(Client, on_delete=models.DO_NOTHING, blank=True, null=True)
+    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True)
+    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, blank=True, null=True)
     status = models.IntegerField(choices=Status.choices, default=Status.SUCCESS)
-    event_time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(auto_now_add=True)
 
 
 

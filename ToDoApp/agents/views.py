@@ -133,3 +133,16 @@ def post_event(request):
         return HttpResponse(event_repo.create(inputs["agent"], inputs["client"], inputs["status"]))
     else:
         return HttpResponse("Wrong method")
+
+
+
+@csrf_exempt
+def attempt(request):
+    if request.method == 'PUT':
+        inputs = json.loads(request.body)
+        result = __сheck_inputs(inputs, ['agent', 'client'])
+        if result != 'passed':
+            return HttpResponse(result)
+        return HttpResponse(event_repo.assassination_attempt(inputs["agent"], inputs["client"]))
+    else:
+        return HttpResponse("Wrong method")

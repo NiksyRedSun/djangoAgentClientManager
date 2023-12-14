@@ -1,3 +1,5 @@
+import random
+
 from .models import Event, Agent, Client
 
 
@@ -51,4 +53,44 @@ class event_repo:
             return f"Event id {id} was updated"
         except:
             return f'Something went wrong'
+
+
+
+    def assassination_attempt(self, agent_id, client_id):
+        try:
+            agent = Agent.objects.get(id=agent_id)
+            client = Client.objects.get(id=client_id)
+            random_num = (agent.equipment_level - client.security_level)*0.1 + agent.exp/1000*0.01 + random.random()
+            event = Event()
+            event.agent = agent
+            event.client = client
+
+            if random_num <= 0.25:
+                agent.membership = 0
+                agent.status = 0
+                event.status = 4
+                info = f"{agent.first_name} {agent.nickname} {agent.last_name} is KIA"
+            elif random_num <= 0.5:
+                agent.membership = 0
+                event.status = 3
+                info = f"{agent.first_name} {agent.nickname} {agent.last_name} is uncovered as agent"
+            elif random_num <= 0.75:
+                event.status = 2
+                info = f"{agent.first_name} {agent.nickname} {agent.last_name} failed"
+            else:
+                event.status = 1
+                agent.exp += client.exp
+                agent.money += client.price
+                client.status = 0
+                info = f"{agent.first_name} {agent.nickname} {agent.last_name} made his work"
+
+            agent.save()
+            client.save()
+            event.save()
+
+            return info
+
+        except:
+            return f'Something went wrong with request'
+
 
