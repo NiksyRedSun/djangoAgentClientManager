@@ -21,5 +21,15 @@ urlpatterns = [
 
     path('attempt', views.attempt, name='attempt'),
 
+    path('newagent', views.new_agent, name='new_agent'),
+    path('newclient', views.new_client, name='new_client'),
+
+
+    path('getallevs', views.get_all_events_for_agent, name='getallevs'),
+    path('getuncoverev', views.get_uncovering_event, name='getuncoverev'),
+    path('getallactive', views.get_all_active_agents, name='getallactive'),
+    path('getallex', views.get_all_ex_agents, name='getallex'),
+    path('getalldead', views.get_all_dead_agents, name='getalldead'),
+
 
 ]

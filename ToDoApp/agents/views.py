@@ -146,3 +146,47 @@ def attempt(request):
         return HttpResponse(event_repo.assassination_attempt(inputs["agent"], inputs["client"]))
     else:
         return HttpResponse("Wrong method")
+
+
+@csrf_exempt
+def new_agent(request):
+    return HttpResponse(event_repo.new_agent())
+
+
+@csrf_exempt
+def new_client(request):
+    return HttpResponse(event_repo.new_client())
+
+
+
+@csrf_exempt
+def get_all_events_for_agent(request):
+
+    inputs = json.loads(request.body)
+    result = __сheck_inputs(inputs, ['agent'])
+    if result != 'passed':
+        return HttpResponse(result)
+    return HttpResponse(agent_repo.get_all_events_for_agent(inputs["agent"]))
+
+@csrf_exempt
+def get_uncovering_event(request):
+    inputs = json.loads(request.body)
+    result = __сheck_inputs(inputs, ['agent'])
+    if result != 'passed':
+        return HttpResponse(result)
+    return HttpResponse(agent_repo.get_uncovering_event(inputs["agent"]))
+
+
+@csrf_exempt
+def get_all_active_agents(request):
+    return HttpResponse(agent_repo.get_all_active_agents())
+
+
+@csrf_exempt
+def get_all_ex_agents(request):
+    return HttpResponse(agent_repo.get_all_ex_agents())
+
+
+@csrf_exempt
+def get_all_dead_agents(request):
+    return HttpResponse(agent_repo.get_all_dead_agents())

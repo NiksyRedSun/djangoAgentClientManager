@@ -85,7 +85,7 @@ class Client(models.Model):
                f'уровень защиты: {self.security_level_choices_dict[self.security_level]}'
 
 
-class Event(models.Model):
+class EventForClients(models.Model):
 
     class Status(models.IntegerChoices):
         SUCCESS = 1, 'успех'
@@ -96,8 +96,8 @@ class Event(models.Model):
     status_choices_dict = dict(Status.choices)
 
 
-    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True)
-    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, blank=True, null=True)
+    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
+    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
     status = models.IntegerField(choices=Status.choices, default=Status.SUCCESS)
     time = models.DateTimeField(auto_now_add=True)
 
@@ -106,4 +106,27 @@ class Event(models.Model):
     def __str__(self):
         return f'\nАгент: {self.agent.first_name} \"{self.agent.nickname}\" {self.agent.last_name}\n' \
                f'Цель: {self.client.first_name} {self.client.last_name}\n' \
+               f'Статус: {self.status_choices_dict[self.status]}'
+
+
+class EventForAgents(models.Model):
+
+    class Status(models.IntegerChoices):
+        SUCCESS = 1, 'успех'
+        FAILURE = 2, 'осечка'
+        UNCOVER = 3, 'раскрытие'
+        AGENTDEATH = 4, 'смерть агента'
+
+    status_choices_dict = dict(Status.choices)
+
+
+    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
+    target = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
+    status = models.IntegerField(choices=Status.choices, default=Status.SUCCESS)
+    time = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f'\nАгент: {self.agent.first_name} \"{self.agent.nickname}\" {self.agent.last_name}\n' \
+               f'Цель: {self.target.first_name} \"{self.target.nickname}\" {self.target.last_name}\n' \
                f'Статус: {self.status_choices_dict[self.status]}'

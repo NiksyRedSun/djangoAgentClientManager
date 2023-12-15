@@ -1,5 +1,10 @@
+import json
+from .models import Agent, EventForAgents, EventForClients, Client
+from django.forms.models import model_to_dict
 
-from .models import Client
+
+
+
 
 
 
@@ -26,9 +31,10 @@ class client_repo:
     def get_all(self):
         try:
             result = Client.objects.all()
-            return [f"{client.__str__()}\n" for client in result]
-        except:
-            return "Something went wrong, we can't send you list of targets"
+            return json.dumps([model_to_dict(agent) for agent in result])
+        except Exception as e:
+            print(e)
+            return f'Something went wrong'
 
 
     def delete(self, id):
