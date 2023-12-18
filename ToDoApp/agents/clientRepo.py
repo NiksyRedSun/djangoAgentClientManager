@@ -30,7 +30,7 @@ class client_repo:
 
     def get_all(self):
         try:
-            result = Client.objects.all()
+            result = Client.objects.all().order_by("-price")
             return json.dumps([model_to_dict(agent) for agent in result])
         except Exception as e:
             print(e)

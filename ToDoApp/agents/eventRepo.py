@@ -1,7 +1,8 @@
 import random
-
+import json
 from .models import EventForClients, Agent, Client, EventForAgents
-
+from django.forms.models import model_to_dict
+from django.core import serializers
 
 names = [
     "Alice", "Andrew",
@@ -115,10 +116,26 @@ class event_repo:
 
     def get_all(self):
         try:
-            result = EventForClients.objects.all()
-            return [f"{event}\n" for event in result]
-        except:
-            return "Something went wrong, we can't send you events"
+            events = [*EventForClients.objects.all(), *EventForAgents.objects.all()]
+            events.sort(key=lambda x: x.time)
+
+            def time_to_unix(event):
+                event.time = int(event.time.timestamp())
+                return event
+
+            events = list(map(time_to_unix, events))
+
+            dict_list = [model_to_dict(event) for event in events]
+
+            for i in range(len(events)):
+                dict_list[i]["time"] = events[i].time
+
+
+            return json.dumps(dict_list)
+
+        except Exception as e:
+            print(e)
+            return f'Something went wrong'
 
 
     def delete(self, id):

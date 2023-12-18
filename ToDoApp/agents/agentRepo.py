@@ -87,7 +87,7 @@ class agent_repo:
     def get_uncovering_event(self, id):
         try:
             agent = Agent.objects.get(id=id)
-            event = EventForClients.objects.filter(agent=agent)
+            event = EventForClients.objects.filter(agent=agent, status=4)
             return json.dumps(model_to_dict(event[0]))
 
         except Exception as e:
@@ -97,7 +97,7 @@ class agent_repo:
 
     def get_all_active_agents(self):
         try:
-            result = Agent.objects.filter(status=True, membership=True)
+            result = Agent.objects.filter(status=True, membership=True).order_by("-exp")
             return json.dumps([model_to_dict(agent) for agent in result])
 
         except Exception as e:
