@@ -91,6 +91,9 @@ nicknames = [
 ]
 
 
+def time_to_unix(event):
+    event.time = int(event.time.timestamp())
+    return event
 
 
 class event_repo:
@@ -109,7 +112,12 @@ class event_repo:
     def get(self, id):
         try:
             event = EventForClients.objects.get(id=id)
-            return json.dumps(model_to_dict(event))
+
+            event = time_to_unix(event)
+            result_dict = model_to_dict(event)
+            result_dict['time'] = event.time
+
+            return json.dumps(result_dict)
         except:
             return f'Something went wrong'
 
@@ -118,10 +126,6 @@ class event_repo:
         try:
             events = [*EventForClients.objects.all(), *EventForAgents.objects.all()]
             events.sort(key=lambda x: x.time, reverse=True)
-
-            def time_to_unix(event):
-                event.time = int(event.time.timestamp())
-                return event
 
             events = list(map(time_to_unix, events))
 
