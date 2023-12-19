@@ -8,6 +8,8 @@ urlpatterns = [
     path('', views.index, name='get_agents'),
     path('agent', views.post_agent, name='post_agent'),
     path('agent/<int:id>', views.get_delete_put_agent, name='get_delete_put_agent'),
+    path('agentcontracts/<int:id>', views.get_agent_contracts, name='get_agent_contracts'),
+
 
 
     path('clients', views.get_all_clients, name='get_all_clients'),

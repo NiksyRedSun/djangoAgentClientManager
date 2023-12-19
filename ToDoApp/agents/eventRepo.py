@@ -117,7 +117,7 @@ class event_repo:
     def get_all(self):
         try:
             events = [*EventForClients.objects.all(), *EventForAgents.objects.all()]
-            events.sort(key=lambda x: x.time)
+            events.sort(key=lambda x: x.time, reverse=True)
 
             def time_to_unix(event):
                 event.time = int(event.time.timestamp())

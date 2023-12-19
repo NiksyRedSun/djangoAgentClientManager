@@ -5,6 +5,8 @@ from django.core import serializers
 
 
 
+
+
 class agent_repo:
 
 
@@ -21,7 +23,17 @@ class agent_repo:
     def get(self, id):
         try:
             agent = Agent.objects.get(id=id)
-            return json.dumps(model_to_dict(agent))
+
+            def time_to_unix(agent):
+                agent.start_membership = int(agent.start_membership.timestamp())
+                return agent
+
+            agent = time_to_unix(agent)
+            agent_dict = model_to_dict(agent)
+            agent_dict['start_membership'] = agent.start_membership
+
+            return json.dumps(agent_dict)
+
         except Exception as e:
             print(e)
             return f'Something went wrong'
@@ -97,8 +109,21 @@ class agent_repo:
 
     def get_all_active_agents(self):
         try:
-            result = Agent.objects.filter(status=True, membership=True).order_by("-exp")
-            return json.dumps([model_to_dict(agent) for agent in result])
+            agents = Agent.objects.filter(status=True, membership=True).order_by("-exp")
+
+            def time_to_unix(agent):
+                agent.start_membership = int(agent.start_membership.timestamp())
+                return agent
+
+            agents = list(map(time_to_unix, agents))
+
+            dict_list = [model_to_dict(event) for event in agents]
+
+            for i in range(len(agents)):
+                dict_list[i]["start_membership"] = agents[i].start_membership
+
+            return json.dumps(dict_list)
+
 
         except Exception as e:
             print(e)
@@ -119,6 +144,17 @@ class agent_repo:
         try:
             result = Agent.objects.filter(status=False)
             return json.dumps([model_to_dict(agent) for agent in result])
+
+        except Exception as e:
+            print(e)
+            return f'Something went wrong'
+
+
+    def get_agent_contracts(self, id):
+        try:
+            agent = Agent.objects.get(id=id)
+            events = EventForClients.objects.filter(agent=agent)
+            return json.dumps([model_to_dict(event) for event in events])
 
         except Exception as e:
             print(e)
