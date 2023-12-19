@@ -109,9 +109,9 @@ class event_repo:
     def get(self, id):
         try:
             event = EventForClients.objects.get(id=id)
-            return event.__str__()
+            return json.dumps(model_to_dict(event))
         except:
-            return f'Event with id {id} not found'
+            return f'Something went wrong'
 
 
     def get_all(self):
@@ -200,7 +200,7 @@ class event_repo:
             client.save()
             event.save()
 
-            return info
+            return json.dumps(model_to_dict(event))
 
         except:
             return f'Something went wrong with request'

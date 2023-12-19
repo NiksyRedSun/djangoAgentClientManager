@@ -23,14 +23,22 @@ class client_repo:
     def get(self, id):
         try:
             client = Client.objects.get(id=id)
-            return client.__str__()
+            return json.dumps(model_to_dict(client))
         except:
-            return f'Client with id {id} not found'
+            return f'Something went wrong'
 
 
     def get_all(self):
         try:
             result = Client.objects.all().order_by("-price")
+            return json.dumps([model_to_dict(agent) for agent in result])
+        except Exception as e:
+            print(e)
+            return f'Something went wrong'
+
+    def get_all_alive(self):
+        try:
+            result = Client.objects.all().filter(status=True).order_by("-price")
             return json.dumps([model_to_dict(agent) for agent in result])
         except Exception as e:
             print(e)
