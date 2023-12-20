@@ -96,8 +96,8 @@ class EventForClients(models.Model):
     status_choices_dict = dict(Status.choices)
 
 
-    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
-    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
+    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+', db_constraint=False)
+    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+', db_constraint=False)
     status = models.IntegerField(choices=Status.choices, default=Status.SUCCESS)
     time = models.DateTimeField(auto_now_add=True)
 
@@ -120,8 +120,8 @@ class EventForAgents(models.Model):
     status_choices_dict = dict(Status.choices)
 
 
-    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
-    target = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
+    agent = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+', db_constraint=False)
+    target = models.ForeignKey(Agent, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+', db_constraint=False)
     status = models.IntegerField(choices=Status.choices, default=Status.SUCCESS)
     time = models.DateTimeField(auto_now_add=True)
 

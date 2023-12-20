@@ -21,7 +21,10 @@ urlpatterns = [
     path('event', views.post_event, name='post_event'),
     path('event/<int:id>', views.get_delete_put_event, name='get_delete_put_event'),
 
+    path('trashevent/<int:id>', views.get_trash_event, name='get_trash_event'),
+
     path('attempt', views.attempt, name='attempt'),
+    path('trashoutattempt', views.trash_out_attempt, name='trash_out_attempt'),
 
     path('newagent', views.new_agent, name='new_agent'),
     path('newclient', views.new_client, name='new_client'),

@@ -122,6 +122,19 @@ class event_repo:
             return f'Something went wrong'
 
 
+    def get_trash_event(self, id):
+        try:
+            event = EventForAgents.objects.get(id=id)
+
+            event = time_to_unix(event)
+            result_dict = model_to_dict(event)
+            result_dict['time'] = event.time
+
+            return json.dumps(result_dict)
+        except:
+            return f'Something went wrong'
+
+
     def get_all(self):
         try:
             events = [*EventForClients.objects.all(), *EventForAgents.objects.all()]
@@ -181,16 +194,16 @@ class event_repo:
             event.agent = agent
             event.client = client
 
-            if random_num <= 0.25:
+            if random_num <= 0.15:
                 agent.membership = 0
                 agent.status = 0
                 event.status = 4
                 info = f"{agent.first_name} {agent.nickname} {agent.last_name} is KIA"
-            elif random_num <= 0.5:
+            elif random_num <= 0.3:
                 agent.membership = 0
                 event.status = 3
                 info = f"{agent.first_name} {agent.nickname} {agent.last_name} is uncovered as agent"
-            elif random_num <= 0.75:
+            elif random_num <= 0.65:
                 event.status = 2
                 info = f"{agent.first_name} {agent.nickname} {agent.last_name} failed"
             else:
@@ -212,13 +225,13 @@ class event_repo:
 
 
     def new_agent(self):
-        # try:
+        try:
             agent = Agent(first_name=random.choice(names), last_name=random.choice(surnames),
                           nickname=random.choice(nicknames), age=random.randint(20, 50))
             agent.save()
-            return f'Our crew got new member, his id is {agent.id}'
-        # except:
-        #     return "Something went wrong, new agent wasn't created"
+            return json.dumps(model_to_dict(agent))
+        except:
+            return "Something went wrong, new agent wasn't created"
 
 
 
@@ -226,7 +239,7 @@ class event_repo:
         try:
             client = Client(first_name=random.choice(names), last_name=random.choice(surnames), age=random.randint(20, 50))
             client.save()
-            return f'We got new target, his id is {client.id}'
+            return json.dumps(model_to_dict(client))
         except:
             return "Something went wrong, new target wasn't created"
 
@@ -239,18 +252,13 @@ class event_repo:
             random_num = (agent.equipment_level - target.equipment_level)*0.1 + agent.exp/1000*0.01 - target.exp/1000*0.01 + random.random()
             event = EventForAgents(agent=agent, target=target)
 
-            if random_num <= 0.25:
+            if random_num <= 0.15:
                 agent.membership = 0
                 agent.status = 0
                 event.status = 4
                 info = f"{agent.first_name} {agent.nickname} {agent.last_name} is KIA"
 
-            elif random_num <= 0.5:
-                agent.membership = 0
-                event.status = 3
-                info = f"{agent.first_name} {agent.nickname} {agent.last_name} is uncovered as agent"
-
-            elif random_num <= 0.75:
+            elif random_num <= 0.65:
                 event.status = 2
                 info = f"{agent.first_name} {agent.nickname} {agent.last_name} failed"
 
@@ -265,7 +273,7 @@ class event_repo:
             target.save()
             event.save()
 
-            return info
+            return json.dumps(model_to_dict(event))
 
         except:
             return f'Something went wrong with request'

@@ -124,6 +124,15 @@ def get_delete_put_event(request, id):
 
 
 @csrf_exempt
+def get_trash_event(request, id):
+
+    if request.method == 'GET':
+        return HttpResponse(event_repo.get_trash_event(id))
+    else:
+        return HttpResponse("Wrong method")
+
+
+@csrf_exempt
 def post_event(request):
     if request.method == 'POST':
         inputs = json.loads(request.body)
@@ -149,6 +158,18 @@ def attempt(request):
 
 
 @csrf_exempt
+def trash_out_attempt(request):
+    if request.method == 'PUT':
+        inputs = json.loads(request.body)
+        result = __сheck_inputs(inputs, ['agent', 'target'])
+        if result != 'passed':
+            return HttpResponse(result)
+        return HttpResponse(event_repo.taking_out_trash(inputs["agent"], inputs["target"]))
+    else:
+        return HttpResponse("Wrong method")
+
+
+@csrf_exempt
 def new_agent(request):
     return HttpResponse(event_repo.new_agent())
 
@@ -167,6 +188,7 @@ def get_all_events_for_agent(request):
     if result != 'passed':
         return HttpResponse(result)
     return HttpResponse(agent_repo.get_all_events_for_agent(inputs["agent"]))
+
 
 @csrf_exempt
 def get_uncovering_event(request):

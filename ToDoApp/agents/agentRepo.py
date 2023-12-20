@@ -4,7 +4,14 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 
 
+def time_to_unix_ag(agent):
+    agent.start_membership = int(agent.start_membership.timestamp())
+    return agent
 
+
+def time_to_unix_ev(event):
+    event.time = int(event.time.timestamp())
+    return event
 
 
 class agent_repo:
@@ -24,11 +31,8 @@ class agent_repo:
         try:
             agent = Agent.objects.get(id=id)
 
-            def time_to_unix(agent):
-                agent.start_membership = int(agent.start_membership.timestamp())
-                return agent
 
-            agent = time_to_unix(agent)
+            agent = time_to_unix_ag(agent)
             agent_dict = model_to_dict(agent)
             agent_dict['start_membership'] = agent.start_membership
 
@@ -77,11 +81,9 @@ class agent_repo:
             events = [*EventForClients.objects.filter(agent=agent), *EventForAgents.objects.filter(agent=agent)]
             events.sort(key=lambda x: x.time)
 
-            def time_to_unix(event):
-                event.time = int(event.time.timestamp())
-                return event
 
-            events = list(map(time_to_unix, events))
+
+            events = list(map(time_to_unix_ev, events))
 
             dict_list = [model_to_dict(event) for event in events]
 
@@ -99,8 +101,13 @@ class agent_repo:
     def get_uncovering_event(self, id):
         try:
             agent = Agent.objects.get(id=id)
-            event = EventForClients.objects.filter(agent=agent, status=4)
-            return json.dumps(model_to_dict(event[0]))
+            event = EventForClients.objects.filter(agent=agent, status=3)[0]
+            event = time_to_unix_ev(event)
+
+            event_dict = model_to_dict(event)
+            event_dict['time'] = event.time
+
+            return json.dumps(event_dict)
 
         except Exception as e:
             print(e)
@@ -111,11 +118,9 @@ class agent_repo:
         try:
             agents = Agent.objects.filter(status=True, membership=True).order_by("-exp")
 
-            def time_to_unix(agent):
-                agent.start_membership = int(agent.start_membership.timestamp())
-                return agent
 
-            agents = list(map(time_to_unix, agents))
+
+            agents = list(map(time_to_unix_ag, agents))
 
             dict_list = [model_to_dict(event) for event in agents]
 
@@ -132,7 +137,7 @@ class agent_repo:
 
     def get_all_ex_agents(self):
         try:
-            result = Agent.objects.filter(membership=False, status=True)
+            result = Agent.objects.filter(membership=False, status=True).order_by("-exp")
             return json.dumps([model_to_dict(agent) for agent in result])
 
         except Exception as e:
